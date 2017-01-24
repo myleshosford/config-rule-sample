@@ -1,32 +1,29 @@
 #
-# Sample config rule framework code
+# Custom AWS Config Rule - Skeleton Code
 #
 
 import boto3, json
 
+def evaluate_compliance(config_item, vpc_id):
+    return 'NON_COMPLIANT'
+
 def lambda_handler(event, context):
     
-    #Create AWS clients
-    #iam = boto3.client('iam')
+    # Create AWS SDK clients & initialize custom rule parameters
     config = boto3.client('config')
-    
-    #Create current invokation info
     invoking_event = json.loads(event['invokingEvent'])
     compliance_value = 'NOT_APPLICABLE'
-    account_id = event['accountId']
+    resource_id = invoking_event['configurationItem']['resourceId']
                 
-    #Evaluate Compliance
-    if (1 < 2):
-        compliance_value = 'NON_COMPLIANT'
-    else:
-        compliance_value = 'COMPLIANT'
-        
+    
+    compliance_value = evaluate_compliance(invoking_event['configurationItem'], resource_id)
+          
     
     response = config.put_evaluations(
        Evaluations=[
             {
-                'ComplianceResourceType': 'AWS::::Account',
-                'ComplianceResourceId': account_id,
+                'ComplianceResourceType': invoking_event['configurationItem']['resourceType'],
+                'ComplianceResourceId': resource_id,
                 'ComplianceType': compliance_value,
                 'Annotation': 'Insert text here to detail why control passed/failed',
                 'OrderingTimestamp': invoking_event['notificationCreationTime']
