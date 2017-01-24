@@ -1,10 +1,10 @@
 #
-# Custom AWS Config Rule - Skeleton Code
+# Custom AWS Config Rule - Boilerplate Code
 #
 
 import boto3, json
 
-def evaluate_compliance(config_item, vpc_id):
+def evaluate_compliance(config_item, r_id):
     return 'NON_COMPLIANT'
 
 def lambda_handler(event, context):
